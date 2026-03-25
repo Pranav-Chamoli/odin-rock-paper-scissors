@@ -9,41 +9,44 @@ function getComputerChoice() {
   }
 }
 
-function getHumanChoice() {
-  let humanChoice = prompt("Enter your choice");
-  return humanChoice;
-}
-
 function playGame() {
   let humanScore = 0;
   let computerScore = 0;
+  const rockButton = document.querySelector("#rockButton");
+  rockButton.addEventListener("click", () => playRound("rock"));
+  const paperButton = document.querySelector("#paperButton");
+  paperButton.addEventListener("click", () => playRound("paper"));
+  const scissorsButton = document.querySelector("#scissorsButton");
+  scissorsButton.addEventListener("click", () => playRound("scissors"));
+  const resultDiv = document.querySelector("#results");
 
-  function playRound(humanChoice, computerChoice) {
-    const humanSelection = getHumanChoice().toLowerCase();
+  function playRound(humanChoice) {
     const computerSelection = getComputerChoice();
-
-    if (humanSelection === computerSelection) {
-      console.log("Its a draw");
+    if (humanChoice === computerSelection) {
+      resultDiv.textContent = `Its a draw!! | Score: You - ${humanScore}, Computer - ${computerScore}`;
     } else if (
-      (humanSelection === "rock" && computerSelection === "scissors") ||
-      (humanSelection === "paper" && computerSelection === "rock")
+      (humanChoice === "rock" && computerSelection === "scissors") ||
+      (humanChoice === "paper" && computerSelection === "rock") ||
+      (humanChoice === "scissors" && computerSelection === "paper")
     ) {
-      console.log("You won this round!!");
-      return humanScore++;
+      humanScore++;
+      resultDiv.textContent = `You won this round!! | Score: You - ${humanScore}, Computer - ${computerScore}`;
     } else {
-      console.log("Computer won this round!!");
-      return computerScore++;
+      computerScore++;
+      resultDiv.textContent = `Computer won this round!! | Score: You - ${humanScore}, Computer - ${computerScore}`;
     }
-  }
 
-  for (let numberOfRounds = 1; numberOfRounds <= 5; numberOfRounds++) {
-    playRound();
-  }
-
-  if (humanScore > computerScore) {
-    console.log("You won!!!");
-  } else {
-    console.log("Computer won ;-;");
+    if (humanScore === 5) {
+      resultDiv.textContent = "You won the game";
+      rockButton.disabled = true;
+      paperButton.disabled = true;
+      scissorsButton.disabled = true;
+    } else if (computerScore === 5) {
+      resultDiv.textContent = "Computer won the game";
+      rockButton.disabled = true;
+      paperButton.disabled = true;
+      scissorsButton.disabled = true;
+    }
   }
 }
 
